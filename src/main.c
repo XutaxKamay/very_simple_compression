@@ -91,13 +91,10 @@ bool decompress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 
 bool compress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 {
-    bool result;
     byte *current_byte, *next_byte;
     size_t i, j;
     size_t count_same_bytes;
     size_t old_size;
-
-    result = true;
 
     memset(output_buf, 0, sizeof(buffer_t));
 
@@ -138,8 +135,7 @@ bool compress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 
             if (output_buf->addr == NULL)
             {
-                result = false;
-                break;
+                return false;
             }
         }
 
@@ -149,7 +145,7 @@ bool compress_buffer(buffer_t* input_buf, buffer_t* output_buf)
                  sizeof(count_same_bytes)) = *current_byte;
     }
 
-    return result;
+    return true;
 }
 
 int main()
@@ -165,6 +161,7 @@ int main()
         printf("couldn't allocate test buffer\n");
         return 0;
     }
+
 
     for (i = 0; i < BUFFER_SIZE; i += 0x10)
     {
