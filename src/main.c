@@ -25,6 +25,9 @@ typedef struct buffer_s
     size_t size;
 } buffer_t;
 
+/*
+ * Free buffer
+ */
 void free_buffer(buffer_t* buf)
 {
     if (buf->addr != NULL)
@@ -34,6 +37,9 @@ void free_buffer(buffer_t* buf)
     }
 }
 
+/*
+ * Allocate a buffer
+ */
 bool alloc_buffer(size_t size, buffer_t* output_buf)
 {
     memset(output_buf, 0, sizeof(buffer_t));
@@ -49,6 +55,9 @@ bool alloc_buffer(size_t size, buffer_t* output_buf)
     return false;
 }
 
+/*
+ * Decompress a buffer
+ */
 bool decompress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 {
     size_t i;
@@ -59,7 +68,9 @@ bool decompress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 
     for (i = 0; i < input_buf->size; i += sizeof(count_same_bytes) + 1)
     {
+        // Read how many times we got the same bytes.
         count_same_bytes = *(size_t*)((uintptr_t)input_buf->addr + i);
+        // Read the current byte that is the same inside the decompressed buffer
         current_byte = *(byte*)((uintptr_t)input_buf->addr + i +
                                 sizeof(count_same_bytes));
 
@@ -89,6 +100,9 @@ bool decompress_buffer(buffer_t* input_buf, buffer_t* output_buf)
     return true;
 }
 
+/*
+ * Compress a buffer
+ */
 bool compress_buffer(buffer_t* input_buf, buffer_t* output_buf)
 {
     byte *current_byte, *next_byte;
